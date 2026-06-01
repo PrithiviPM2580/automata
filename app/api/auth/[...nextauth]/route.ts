@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import type { NextAuthOptions } from "next-auth"
+import { withErrorHandler } from "@/lib/with-error-handler"
+import { UserService } from "@/services/user/user-service"
 
 export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
@@ -22,8 +24,21 @@ export const authOptions: NextAuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async signIn() {
-      //db query here
+    async signIn({ user, account }) {
+      const userData = { ...user } as {
+        id: string
+        name: string
+        email: string
+        image: string
+      }
+      const accessToken = account?.access_token
+      const refreshToken = account?.refresh_token
+
+      withErrorHandler(async () => {
+        const userService = UserService.getInstance()
+        await userService.createUser({ ...userData, accessToken, refreshToken })
+      })
+
       return true
     },
     async redirect({ baseUrl }) {
