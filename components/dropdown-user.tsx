@@ -12,8 +12,11 @@ import { Button } from "./ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { LogOut, Palette } from "lucide-react"
 import SelectTheme from "./select-theme"
+import { useSession, signOut } from "next-auth/react"
 
-export default function DropdownUser({ isUser }: { isUser: boolean }) {
+export default function DropdownUser() {
+  const { data: session } = useSession()
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,10 +25,10 @@ export default function DropdownUser({ isUser }: { isUser: boolean }) {
           size="icon"
           className="size-9 overflow-hidden rounded-full p-0"
         >
-          {isUser ? (
+          {session?.user ? (
             <Avatar className="size-9">
               <AvatarImage
-                src="https://github.com/shadcn.png"
+                src={session?.user?.image || "https://github.com/shadcn.png"}
                 alt="User avatar"
               />
               <AvatarFallback />
@@ -39,10 +42,10 @@ export default function DropdownUser({ isUser }: { isUser: boolean }) {
       <DropdownMenuContent className="flex w-46 flex-col gap-0.5" align="end">
         <DropdownMenuGroup className="flex items-center justify-between">
           <div>
-            {isUser ? (
+            {session?.user ? (
               <Avatar className="size-7">
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
+                  src={session?.user?.image || "https://github.com/shadcn.png"}
                   alt="User avatar"
                 />
                 <AvatarFallback />
@@ -53,10 +56,10 @@ export default function DropdownUser({ isUser }: { isUser: boolean }) {
           </div>
           <div className="flex flex-col">
             <h4 className="text-sm leading-none font-medium">
-              {isUser ? "John Doe" : "Guest"}
+              {session?.user?.name || "John Doe"}
             </h4>
             <p className="text-xs text-muted-foreground">
-              {isUser ? "john.doe@example.com" : "guest@example.com"}
+              {session?.user?.email || "john.doe@example.com"}
             </p>
           </div>
         </DropdownMenuGroup>
@@ -80,7 +83,7 @@ export default function DropdownUser({ isUser }: { isUser: boolean }) {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => signOut()}>
             <LogOut /> Log out
           </DropdownMenuItem>
         </DropdownMenuGroup>

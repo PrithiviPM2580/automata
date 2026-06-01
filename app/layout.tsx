@@ -4,20 +4,21 @@ import "./globals.css"
 import { cn } from "@/lib/utils"
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 import type { Session } from "next-auth"
-import { Providers } from "@/components/prooviders"
+import { Providers } from "@/components/providers"
+import { getSession } from "@/lib/auth"
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  session,
 }: Readonly<{
   children: React.ReactNode
-  session: Session | null
 }>) {
+  const session: Session | null = await getSession()
+
   return (
     <html
       lang="en"
