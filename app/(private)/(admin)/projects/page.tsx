@@ -1,3 +1,5 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,11 +14,19 @@ import { WORKFLOWS } from "@/lib/constants"
 import { formatTimeAgo } from "@/lib/utils"
 import { Plus, Edit3, Play, Trash } from "lucide-react"
 import Navbar from "@/components/navbar"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/stores"
+import { useSession } from "next-auth/react"
+import ProjectModal from "@/components/project/project-modal"
+import { toggleModal } from "@/stores/project-slice"
 
 export default function Projects() {
+  const dispatch = useDispatch<AppDispatch>()
+  const { data: session } = useSession()
   return (
     <div className="min-h-full">
       <Navbar />
+      <ProjectModal />
       <section className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -32,6 +42,7 @@ export default function Projects() {
               variant="default"
               size="sm"
               className="mt-2 flex h-10 items-center gap-2 sm:mt-0 sm:ml-3"
+              onClick={() => dispatch(toggleModal())}
             >
               <Plus />
               New Workflow

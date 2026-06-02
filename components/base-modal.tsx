@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog"
 import { BaseModalProps } from "@/types"
 
@@ -21,26 +21,27 @@ export default function BaseModal({
 }: BaseModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent
         style={{
-          width: "500vw",
           maxWidth: width + "px",
-          height: height + "px",
           background: background,
         }}
+        className="overflow-hidden p-0"
       >
-        {(title || description) && (
-          <DialogHeader>
-            {title && (
-              <DialogTitle className="text-gray-500">{title}</DialogTitle>
-            )}
-            {description && (
-              <DialogDescription>{description}</DialogDescription>
-            )}
-          </DialogHeader>
-        )}
-        <div className="overflow-auto overflow-y-auto py-4">{children}</div>
+        <div className="flex max-h-[85vh] flex-col">
+          {(title || description) && (
+            <DialogHeader className="border-b px-6 py-5">
+              {title && <DialogTitle>{title}</DialogTitle>}
+              {description && (
+                <DialogDescription>{description}</DialogDescription>
+              )}
+            </DialogHeader>
+          )}
+
+          <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
+
+          {footer && <DialogFooter>{footer}</DialogFooter>}
+        </div>
       </DialogContent>
     </Dialog>
   )
