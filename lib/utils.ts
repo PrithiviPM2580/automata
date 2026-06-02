@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { formatDistanceToNowStrict } from "date-fns"
+import { toast } from "sonner"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -27,4 +28,11 @@ export function formatTimeAgo(date: Date) {
   }
 
   return `${amount}${units[unit]} ago`
+}
+
+export const showSuccessToast = (message?: string) => {
+  toast.success(message, {
+    position: "top-right",
+    duration: 3000,
+  })
 }

@@ -3,10 +3,17 @@ import mongoose, { Document, Schema } from "mongoose"
 export interface IProject extends Document {
   name: string
   userId: mongoose.Types.ObjectId
-  status: string
-  trigger: string
+  status?: string
+  trigger?: string
   createdAt: Date
   updatedAt: Date
+}
+
+export interface ProjectInput {
+  name: string
+  userId: string
+  status?: string
+  trigger?: string
 }
 
 const projectSchema = new Schema<IProject>(

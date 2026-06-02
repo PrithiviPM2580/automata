@@ -26,3 +26,12 @@ export interface BaseModalProps {
   height: number
   background?: string
 }
+
+export interface UpdateProjectData {
+  id: string
+  name: string
+  userId: string
+  status?: string
+  trigger?: string
+  updatedAt: Date
+}
